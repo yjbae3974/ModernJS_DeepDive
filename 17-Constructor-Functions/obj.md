@@ -246,7 +246,121 @@ me.sayHello(); // Hi! My name is Lee
 -   constructor: `new` 키워드와 함께 호출할 수 있는 함수
     -   내부 메소드로 [[Construct]]이 호출된다.
 -   non-constructor: `new` 키워드와 함께 호출할 수 없는 함수
-    -   내부 메소드로 [[Call]]이 호출된다..
+    -   내부 메소드로 [[Call]]이 호출된다.
+
+### constructor 예시
+
+```js
+// 1. 함수 선언문
+function Person(name) {
+    this.name = name;
+}
+const person1 = new Person("Lee"); // ✅ 정상 동작
+
+// 2. 함수 표현식
+const Animal = function (type) {
+    this.type = type;
+};
+const animal1 = new Animal("dog"); // ✅ 정상 동작
+
+// 3. 클래스
+class Car {
+    constructor(brand) {
+        this.brand = brand;
+    }
+}
+const car1 = new Car("BMW"); // ✅ 정상 동작
+
+// 4. 빌트인 생성자 함수
+const str = new String("hello"); // ✅ 정상 동작
+const num = new Number(42); // ✅ 정상 동작
+const arr = new Array(1, 2, 3); // ✅ 정상 동작
+const obj = new Object({ a: 1 }); // ✅ 정상 동작
+```
+
+### non-constructor 예시
+
+```js
+// 1. 화살표 함수
+const ArrowFunc = () => {
+    this.name = "test";
+};
+// const arrow1 = new ArrowFunc(); // ❌ TypeError: ArrowFunc is not a constructor
+
+// 2. 메서드 (ES6 축약 메서드)
+const obj = {
+    method() {
+        this.name = "test";
+    },
+};
+// const method1 = new obj.method(); // ❌ TypeError: obj.method is not a constructor
+
+// 3. Generator 함수
+function* generator() {
+    yield 1;
+}
+// const gen1 = new generator(); // ❌ TypeError: generator is not a constructor
+
+// 4. async 함수
+async function asyncFunc() {
+    return "async";
+}
+// const async1 = new asyncFunc(); // ❌ TypeError: asyncFunc is not a constructor
+
+// 5. 빌트인 non-constructor 함수들
+// const math1 = new Math(); // ❌ TypeError: Math is not a constructor
+// const json1 = new JSON(); // ❌ TypeError: JSON is not a constructor
+// const console1 = new console(); // ❌ TypeError: console is not a constructor
+
+// 6. 메서드가 아닌 함수를 객체에서 참조
+const obj2 = {
+    name: "test",
+    getName: function () {
+        return this.name;
+    },
+};
+// const getName1 = new obj2.getName(); // ❌ TypeError: obj2.getName is not a constructor
+```
+
+### constructor 확인 방법
+
+```js
+// constructor인지 확인하는 방법들
+
+// 1. instanceof Function으로 확인
+console.log(Person instanceof Function); // true
+console.log(ArrowFunc instanceof Function); // true (함수이지만 constructor는 아님)
+
+// 2. new.target으로 확인 (함수 내부에서)
+function TestFunc() {
+    if (new.target) {
+        console.log("constructor로 호출됨");
+    } else {
+        console.log("일반 함수로 호출됨");
+    }
+}
+
+new TestFunc(); // "constructor로 호출됨"
+TestFunc(); // "일반 함수로 호출됨"
+
+// 3. 함수의 prototype 프로퍼티 확인
+console.log(Person.prototype); // Person {}
+console.log(ArrowFunc.prototype); // undefined (화살표 함수는 prototype이 없음)
+
+// 4. 직접 호출해보기 (try-catch 사용)
+function isConstructor(func) {
+    try {
+        new func();
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+console.log(isConstructor(Person)); // true
+console.log(isConstructor(ArrowFunc)); // false
+console.log(isConstructor(Math)); // false
+```
 
 ### new 연산자
 
