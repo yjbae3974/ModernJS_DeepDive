@@ -64,7 +64,7 @@ function createUser(name, role) {
     return { name, role };
 }
 
-inst = new createUser("Lee", "admin"); // TypeError: createUser is not a
+inst = new createUser("Lee", "admin"); // TypeError: createUser is not a constructor
 
 // 함수가 생성한 객체를 반환
 console.log(inst); // {name: 'Lee', role: 'admin'}
