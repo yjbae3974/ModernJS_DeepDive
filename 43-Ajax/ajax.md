@@ -221,4 +221,4 @@ fetch("/api/users")
 -   **XMLHttpRequest**: Ajax를 구현하는 네이티브 API (콜백 기반)
 -   **fetch**: Ajax를 구현하는 네이티브 API (Promise 기반)
 -   **Axios**: Ajax를 구현하는 라이브러리 (Promise 기반, 편의 기능 제공)
--   **관계**: 모두 Ajax를 구현하는 다양한 방법들
+-   **관계**: Axios는 fetch API가 존재하기 이전에 존재했던 서드파티 라이브러리. fetch는 ES6가 나온 후 탄생한 내장 라이브러리. 
